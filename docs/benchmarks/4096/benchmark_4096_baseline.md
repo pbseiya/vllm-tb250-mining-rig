@@ -12,6 +12,7 @@
 | **Short** | 1.28 | 12.70 | 5.29 | 51 |
 | **Medium** | 1.36 | 12.19 | 22.53 | 258 |
 | **Thai-Test** | 1.54 | 11.93 | 44.39 | 511 |
+| **Extreme-Fiction** | 2.69 | 11.22 | 350.05 | 3899 |
 
 ## ⚙️ System Metrics (Idle during Start)
 - **RAM Used**: ~13GB (Including Swap usage)

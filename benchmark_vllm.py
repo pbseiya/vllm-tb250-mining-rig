@@ -110,6 +110,6 @@ if __name__ == "__main__":
     print("=== vLLM Performance Benchmark Utility ===")
     print(f"Targeting: {MODEL}")
     for p in TEST_PROMPTS:
-        m_tokens = 4096 if p["name"] == "Extreme-Fiction" else 512
+        m_tokens = 3900 if p["name"] == "Extreme-Fiction" else 512
         run_benchmark(p["name"], p["text"], max_tokens=m_tokens)
     print("\nBenchmark Complete! Results saved to docs/benchmarks/benchmark_results.csv")
