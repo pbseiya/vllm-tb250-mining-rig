@@ -22,3 +22,6 @@
 - The **V1 Engine** delivers exceptionally high throughput (~12 TPS) even on PCIe 1x risers once generation begins.
 - **Latency (TTFT)** is very manageable at under 1.6s.
 - This serves as the stable baseline before testing the **8192 context** expansion.
+
+## 📁 Files
+- **Story**: [cat_domination_story_4096.txt](file:///home/seiya/projects/vllm/docs/benchmarks/4096/cat_domination_story_4096.txt)

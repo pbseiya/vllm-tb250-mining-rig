@@ -98,7 +98,9 @@ def run_benchmark(prompt_name, prompt_text, max_tokens=512):
         
         # Save content for extreme fiction
         if prompt_name == "Extreme-Fiction":
-            content_file = f"docs/benchmarks/cat_domination_story.txt"
+            # Try to detect context length from payload
+            ctx_len = payload.get("max_tokens", "unknown")
+            content_file = f"docs/benchmarks/cat_domination_story_{ctx_len}.txt"
             with open(content_file, "w", encoding="utf-8") as f:
                 f.write(full_response)
             print(f"  > Story saved to: {content_file}")
