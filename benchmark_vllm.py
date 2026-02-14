@@ -15,6 +15,7 @@ TEST_PROMPTS = [
     {"name": "Short", "text": "Explain quantum entanglement in 2 sentences."},
     {"name": "Medium", "text": "Write a short story about a robot learning to paint (approx 200 words)."},
     {"name": "Thai-Test", "text": "ช่วยอธิบายวิธีต้มมาม่าให้อร่อยที่สุดเป็นภาษาไทยหน่อย"},
+    {"name": "Extreme-Fiction", "text": "เขียนนิยายแนว Fiction เรื่อง 'แมวจะครองโลก' โดยเน้นเนื้อหาที่เข้มข้นและจินตนาการล้ำเลิศ ขอความยาวที่สุดเท่าที่คุณจะทำได้ (เป้าหมายคือ 10,000 คำ)"},
 ]
 
 def get_system_metrics():
@@ -28,15 +29,15 @@ def get_system_metrics():
     except:
         return "N/A", "N/A"
 
-def run_benchmark(prompt_name, prompt_text):
+def run_benchmark(prompt_name, prompt_text, max_tokens=512):
     print(f"\n[Benchmarking] Category: {prompt_name}")
     
     payload = {
         "model": MODEL,
         "messages": [{"role": "user", "content": prompt_text}],
-        "stream": True, # Use streaming to measure TTFT
-        "max_tokens": 512,
-        "temperature": 0.7
+        "stream": True,
+        "max_tokens": max_tokens,
+        "temperature": 0.8
     }
 
     start_time = time.time()
@@ -94,6 +95,13 @@ def run_benchmark(prompt_name, prompt_text):
                 ram_start,
                 load_start
             ])
+        
+        # Save content for extreme fiction
+        if prompt_name == "Extreme-Fiction":
+            content_file = f"docs/benchmarks/cat_domination_story.txt"
+            with open(content_file, "w", encoding="utf-8") as f:
+                f.write(full_response)
+            print(f"  > Story saved to: {content_file}")
 
     except Exception as e:
         print(f"  [ERROR] {e}")
@@ -102,5 +110,6 @@ if __name__ == "__main__":
     print("=== vLLM Performance Benchmark Utility ===")
     print(f"Targeting: {MODEL}")
     for p in TEST_PROMPTS:
-        run_benchmark(p["name"], p["text"])
-    print("\nBenchmark Complete! Results saved to benchmark_results.csv")
+        m_tokens = 4096 if p["name"] == "Extreme-Fiction" else 512
+        run_benchmark(p["name"], p["text"], max_tokens=m_tokens)
+    print("\nBenchmark Complete! Results saved to docs/benchmarks/benchmark_results.csv")
