@@ -17,12 +17,12 @@ echo "Starting vLLM with Systemd Scope Safety..."
 echo "- MemoryMax: 90%"
 echo "- PCIe P2P: Disabled"
 
-# Run with Systemd Scope (Priority and Grouping only)
-systemd-run --user --scope \
+# Run with Systemd Scope (Priority and Grouping with Safety Net)
+systemd-run --user --scope -p MemoryMax=90% \
     python3 -m vllm.entrypoints.openai.api_server \
     --model Qwen/Qwen2.5-72B-Instruct-GPTQ-Int8 \
     --tensor-parallel-size 8 \
-    --gpu-memory-utilization 0.80 \
+    --gpu-memory-utilization 0.90 \
     --max-model-len 8192 \
     --max-num-seqs 16 \
     --swap-space 1 \
