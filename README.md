@@ -22,6 +22,13 @@ To launch the vLLM server with all safety layers enabled:
 
 The server will be available at `http://localhost:8000/v1`.
 
+### 🌐 Secure Remote Access (Tailscale)
+If you are connecting from outside your home network, use your **Tailscale IP**:
+```bash
+# Example:
+curl http://100.111.46.25:8000/v1/chat/completions
+```
+
 ## 🛡️ Safety Architecture
 
 Due to the limited System RAM (16GB) and slow interconnects, several safety layers have been implemented:
@@ -69,4 +76,30 @@ curl http://localhost:8000/v1/chat/completions \
         "model": "Qwen/Qwen2.5-72B-Instruct-GPTQ-Int8",
         "messages": [{"role": "user", "content": "Hello!"}]
     }'
+```
+
+### 🌊 Streaming (Real-time)
+To see the AI response typing out in real-time (SSE), use the `"stream": true` parameter. 
+
+**Recommended (Clean View):**
+```bash
+curl -N -s http://localhost:8000/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "Qwen/Qwen2.5-72B-Instruct-GPTQ-Int8",
+        "messages": [{"role": "user", "content": "ขอวิธีทำมาม่าอร่อยสี่เมนู"}],
+        "stream": true
+    }' | python3 -c "
+import sys, json
+for line in sys.stdin:
+    if line.startswith('data: '):
+        data = line[6:].strip()
+        if data == '[DONE]': break
+        try:
+            chunk = json.loads(data)
+            content = chunk['choices'][0]['delta'].get('content', '')
+            print(content, end='', flush=True)
+        except: pass
+print()
+"
 ```
